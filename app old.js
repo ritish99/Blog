@@ -2,13 +2,17 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const Blog = require('./models/blog');
+// const { response } = require('express');
+// const { result } = require('lodash');
+// const { render } = require('ejs');
+
+
 
 //express app
 const app = express();
 
 //connect to mongodb
 const dbURI= "mongodb+srv://ritish:test1234@nodetuts.29h06.mongodb.net/nodetuts?retryWrites=true&w=majority";
-
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true})
     .then((result) => app.listen(3000))
     .catch((err) => console.log(err));
@@ -35,22 +39,18 @@ app.get('/about', (req, res) => {
 });
 
 //blog routes
-app.get('/blogs/create', (req, res) => {
-    res.render('create', {title: 'Create a new blog'}); 
-});
-
 app.get('/blogs',(req, res) => {
-    Blog.find().sort({createdAt: -1 })//comes out as an array then is put into the index view
+    Blog.find().sort({createdAt: -1 })
+    //comes out as an array then is put into the index view
     .then((result) => {
         res.render('index', {title: 'All Blogs', blogs: result});
     })
     .catch((err) => {
         console.log(err);
-    });
+    })
 });
 
 app.post('/blogs', (req, res) =>{
-
     const blog = new Blog(req.body);
 
     blog.save()
@@ -59,10 +59,11 @@ app.post('/blogs', (req, res) =>{
     })
     .catch((err) => {
         console.log(err);
-    });
+    })
 });
 
 app.get('/blogs/:id', (req,res) => {
+
     const id = req.params.id; 
     Blog.findById(id)
     .then(result =>{
@@ -70,7 +71,11 @@ app.get('/blogs/:id', (req,res) => {
     })
     .catch(err => {
         console.log(err);
-    });
+    })
+});
+
+app.get('/blogs/create', (req, res) => {
+    res.render('create', {title: 'Create a new blog'}); 
 });
 
 app.delete('/blogs/:id', (req, res) => {
@@ -78,14 +83,19 @@ app.delete('/blogs/:id', (req, res) => {
   
     Blog.findByIdAndDelete(id)
       .then(result => {
-        res.json({ redirect: '/blogs' });
+        res.redirect('/blogs');
+        //res.render('index', { blogs: result, title: 'All blogs' });
+        //res.json({ redirect: '/blogs' });
       })
       .catch(err => {
         console.log(err);
-      });
+      })
 });
 
 //404 page
 app.use((req, res)=>{
     res.status(404).render('404', {title: '404'});
 });
+
+
+

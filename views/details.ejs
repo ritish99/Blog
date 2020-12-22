@@ -21,12 +21,12 @@
         const endpoint = `/blogs/${trashcan.dataset.doc}`;
 
         fetch(endpoint, {
-            method: 'DELETE'
+            method: 'DELETE',
         })
-        .then((response) => response.json())
-        .then((data) => console.log(data))
+        .then(response => response.json())
+        .then(data => window.location.href = data.redirect)
         .catch(err => console.log(err));
-      })
+    });
   </script>
 </body>
 </html> 
