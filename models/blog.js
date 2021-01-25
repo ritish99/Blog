@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+//creating the blog schema and declaring requirements 
 const blogSchema = new Schema({
     title: {
         type: String,
@@ -14,7 +15,7 @@ const blogSchema = new Schema({
         type: String,
         required: true
     }
-}, {timestamps: true});
+}, {timestamps: true}); //fetching time stamps for when a blog is made
 
 const Blog = mongoose.model('Blog', blogSchema);
-module.exports = Blog; 
+module.exports = Blog;  
