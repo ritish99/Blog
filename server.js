@@ -3,26 +3,11 @@ const http = require('http');
 const fs = require('fs');
 const _ = require('lodash');//npm install to install all dependencies
 
+const HTTP_PORT = process.env.PORT || 3000;
+
 const server = http.createServer((req,res) =>{
-    //console.log(req.url, req.method);
 
-    //lodash
-    const num = _.random(0, 20);
-    console.log(num);
-
-    const greet = _.once(() => {
-        console.log('hello');
-    }); 
-
-    greet();
-    // set header content type
-    // res.setHeader('Content-Type', 'text/html');
-
-    // res.write('<head><link rel="styleseet"></head>');
-    // res.write('<p>hello world</p>');
-    // res.write('<p>hello world part 2</p>');
-    // res.end();
-
+    //All paths
     let path = './views/';
     switch(req.url){
         case '/':
@@ -44,23 +29,18 @@ const server = http.createServer((req,res) =>{
             break;
     }
 
-    //send an html file
+    //sends an html file
     fs.readFile(path, (err, data) =>{
         if(err){
             console.log(err);
             res.end();
         }
         else{
-            //res.write(data);
-            
             res.end(data);//pass data if only loading one thing
         }
     });
-
     res.setHeader('Content-Type', 'text/html');
-
 });
 
-server.listen(3000, 'localhost', ()=>{
-    console.log('listening for requests on port 3000');
+server.listen(HTTP_PORT, 'localhost', ()=>{
 });
